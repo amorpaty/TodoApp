@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import DateHead from './components/DateHead';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AddTodo from './components/AddTodo';
@@ -19,9 +19,14 @@ function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={styles.block}>
-        <DateHead date={today} />
-        <Empty />
-        <AddTodo />
+        {/**behavior={Platform.OS === 'ios' ? 'padding' : undefined} */}
+        <KeyboardAvoidingView
+          behavior={Platform.select({ ios: 'padding', android: undefined })} /* Platform.OS와 삼항연산자 대신 Platform.select 사용하기 */
+          style={styles.avoid}>
+          <DateHead date={today} />
+          <Empty />
+          <AddTodo />
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -29,6 +34,9 @@ function App() {
 
 const styles = StyleSheet.create({
   block: {
+    flex: 1,
+  },
+  avoid: {
     flex: 1,
   }
 });
