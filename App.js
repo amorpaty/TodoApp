@@ -35,6 +35,18 @@ function App() {
     setTodos(todos.concat(todo));
   }
 
+  const onToggle = id => {
+    const nextTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, done: !todo.done } : todo,
+    )
+    setTodos(nextTodos);
+  }
+
+  const onRemove = id => {
+    const nextTodos = todos.filter(todo => todo.id !== id);
+    setTodos(nextTodos);
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={styles.block}>
@@ -43,7 +55,7 @@ function App() {
           behavior={Platform.select({ ios: 'padding', android: undefined })} /* Platform.OS와 삼항연산자 대신 Platform.select 사용하기 */
           style={styles.avoid}>
           <DateHead date={today} />
-          {todos.length === 0 ? <Empty /> : <TodoList todos={todos} />}
+          {todos.length === 0 ? <Empty /> : <TodoList todos={todos} onToggle={onToggle} onRemove={onRemove} />}
           <AddTodo onInsert={onInsert} />
         </KeyboardAvoidingView>
       </SafeAreaView>
